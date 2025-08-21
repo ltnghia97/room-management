@@ -13,45 +13,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/api/auth")
+@RequestMapping("/v1/api/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @PostMapping("add-new-user")
-    public ResponseData<UserEntity> createUser(@RequestBody UserDto userDto) {
+    @PostMapping("add-new")
+    public ResponseData<UserEntity> addNewUser(@RequestBody UserDto userDto) {
         try {
-
-            if (ValidUtil.isNullOrBlank(userDto.getUsername())) {
-                return ResponseData.execute(null, "Username cannot be empty", Constant.RESULT_ERROR);
-            }
-
-            if (ValidUtil.isNullOrBlank(userDto.getPassword())) {
-                return ResponseData.execute(null, "Password cannot be empty", Constant.RESULT_ERROR);
-            }
-
-            if (ValidUtil.isNullOrBlank(userDto.getFullName())) {
-                return ResponseData.execute(null, "Full name cannot be empty", Constant.RESULT_ERROR);
-            }
-
-            if (ValidUtil.isNullOrBlank(userDto.getAddress())) {
-                return ResponseData.execute(null, "Address cannot be empty", Constant.RESULT_ERROR);
-            }
-
-            if (ValidUtil.isValidPhoneNumber(userDto.getPhoneNumber())) {
-                return ResponseData.execute(null, "Phone cannot be empty or wrong format", Constant.RESULT_ERROR);
-            }
-
-            if (ValidUtil.isValidEmail(userDto.getEmail())) {
-                return ResponseData.execute(null, "Email cannot be empty or wrong format", Constant.RESULT_ERROR);
-            }
-
             UserEntity result = userService.save(userDto);
             if (result == null) {
                 return ResponseData.execute(null, Constant.MESSAGE_OK, Constant.RESULT_ERROR);
             }
-
             return ResponseData.execute(result, Constant.MESSAGE_OK, Constant.RESULT_OK);
         } catch (Exception e) {
             return ResponseData.execute(null, e.getMessage(), Constant.RESULT_ERROR);

@@ -21,7 +21,7 @@ public class ValidUtil{
         if (isNullOrBlank(email)) {
             return false;
         }
-        return EMAIL_PATTERN.matcher(email).matches();
+        return !EMAIL_PATTERN.matcher(email).matches();
     }
 
     // Hàm kiểm tra định dạng số điện thoại
@@ -29,7 +29,7 @@ public class ValidUtil{
         if (isNullOrBlank(phoneNumber)) {
             return false;
         }
-        return PHONE_PATTERN.matcher(phoneNumber).matches();
+        return !PHONE_PATTERN.matcher(phoneNumber).matches();
     }
 
 }

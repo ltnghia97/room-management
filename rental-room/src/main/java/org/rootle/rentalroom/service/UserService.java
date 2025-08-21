@@ -6,20 +6,29 @@ import org.rootle.rentalroom.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
 
-    public UserEntity save(UserDto data) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(data.getUsername());
-        userEntity.setPasswordHash(data.getPassword());
-        userEntity.setFullName(data.getFullName());
-        userEntity.setAddress(data.getAddress());
-        userEntity.setPhoneNumber(data.getPhoneNumber());
-        userEntity.setEmail(data.getEmail());
-        return userRepository.save(userEntity);
+    public UserEntity save(UserDto userDto) {
+        UserEntity data = userRepository.findFirstByPhoneNumber(userDto.getPhoneNumber())
+                .orElseGet(() -> {
+                    UserEntity newUser = new UserEntity();
+                    newUser.setCreatedAt(new Date());
+                    return newUser;
+                });
+
+        data.setUsername(userDto.getUsername());
+        data.setPassword(userDto.getPassword());
+        data.setFullName(userDto.getFullName());
+        data.setAddress(userDto.getAddress());
+        data.setPhoneNumber(userDto.getPhoneNumber());
+        data.setEmail(userDto.getEmail());
+
+        return userRepository.save(data);
     }
 }

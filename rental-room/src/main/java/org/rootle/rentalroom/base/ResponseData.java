@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.rootle.rentalroom.constant.Constant;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -21,15 +22,15 @@ public class ResponseData<T> {
     @JsonProperty("data")
     private T data;
     @JsonProperty("timestamp")
-    private String timestamp;
+    private long timestamp;
 
 
     public static <T> ResponseData<T> execute(T data, String message, String result) {
         ResponseData<T> response = new ResponseData<>();
+        response.timestamp = System.currentTimeMillis();
         response.result = Optional.ofNullable(result).orElse(Constant.RESULT_OK);
         response.message = Optional.ofNullable(message).orElse(Constant.MESSAGE_OK);
         response.data = data;
-        response.timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         return response;
     }
 }

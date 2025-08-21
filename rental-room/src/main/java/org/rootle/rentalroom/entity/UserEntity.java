@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.util.Date;
 import static jakarta.persistence.TemporalType.TIMESTAMP;
 
@@ -18,26 +20,27 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+    @Column(name = "password", nullable = false)
+    private String password;
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(name = "address")
+    @Column(name = "address",nullable = false)
     private String address;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number",nullable = false)
     private String phoneNumber;
 
-    @Column(unique = true)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "created_at", updatable = false)
     @Temporal(value = TIMESTAMP)
+    @CreationTimestamp
     private Date createdAt;
 
 //    // Một người dùng có nhiều phòng trọ
