@@ -7,5 +7,5 @@ public class Constant {
 
     /// Messages defined when check business
     final static public String MESSAGE_OK = "Successfully";
-    final static public String MESSAGE_ERROR = "Some errors occurred";
+    final static public String MESSAGE_ERROR = "Something went wrong";
 }

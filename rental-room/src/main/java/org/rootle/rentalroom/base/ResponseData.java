@@ -1,14 +1,9 @@
 package org.rootle.rentalroom.base;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.rootle.rentalroom.constant.Constant;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
 
 @Data
@@ -28,8 +23,8 @@ public class ResponseData<T> {
     public static <T> ResponseData<T> execute(T data, String message, String result) {
         ResponseData<T> response = new ResponseData<>();
         response.timestamp = System.currentTimeMillis();
-        response.result = Optional.ofNullable(result).orElse(Constant.RESULT_OK);
-        response.message = Optional.ofNullable(message).orElse(Constant.MESSAGE_OK);
+        response.result = result;
+        response.message = message;
         response.data = data;
         return response;
     }

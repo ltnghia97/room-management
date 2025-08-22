@@ -1,12 +1,11 @@
 package org.rootle.rentalroom.entity;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.util.Date;
+
 import static jakarta.persistence.TemporalType.TIMESTAMP;
 
 @Entity
@@ -20,6 +19,9 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @Column(name = "usercode", nullable = false, unique = true)
+    private String userCode;
+
     @Column(name = "username", nullable = false)
     private String username;
 
@@ -29,10 +31,10 @@ public class UserEntity {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(name = "address",nullable = false)
+    @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "phone_number",nullable = false)
+    @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 
     @Column(name = "email")
@@ -42,6 +44,7 @@ public class UserEntity {
     @Temporal(value = TIMESTAMP)
     @CreationTimestamp
     private Date createdAt;
+
 
 //    // Một người dùng có nhiều phòng trọ
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
