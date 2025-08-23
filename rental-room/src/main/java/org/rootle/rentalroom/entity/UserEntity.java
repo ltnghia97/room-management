@@ -25,7 +25,7 @@ public class UserEntity {
     private String userCode;
 
     @Column(name = "role", nullable = false)
-    private String role; // Ví dụ: "LANDLORD" hoặc "TENANT"
+    private String role;
 
     @Column(name = "username", nullable = false)
     private String username;

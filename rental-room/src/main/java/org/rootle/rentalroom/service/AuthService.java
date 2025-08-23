@@ -1,11 +1,13 @@
 package org.rootle.rentalroom.service;
 
+import org.rootle.rentalroom.base.exception.ControllerException;
 import org.rootle.rentalroom.dto.request.auth.ChangePasswordRequestDto;
 import org.rootle.rentalroom.dto.request.auth.LoginRequestDto;
-import org.rootle.rentalroom.dto.request.auth.RegisterRequestDto;
+import org.rootle.rentalroom.dto.request.auth.RegisterUserDto;
 import org.rootle.rentalroom.dto.response.auth.LoginResponseDto;
 import org.rootle.rentalroom.entity.RefreshTokenEntity;
 import org.rootle.rentalroom.entity.UserEntity;
+import org.rootle.rentalroom.enum_common.ErrorCodeCommon;
 import org.rootle.rentalroom.repository.RefreshTokenRepository;
 import org.rootle.rentalroom.repository.UserRepository;
 import org.rootle.rentalroom.util.JwtUtil;
@@ -36,20 +38,19 @@ public class AuthService {
     private JwtUtil jwtUtil;
 
 
-    public UserEntity register(RegisterRequestDto requestDto) {
-        Optional<UserEntity> existingUser = userRepository.findFirstByPhoneNumber(requestDto.getPhoneNumber());
+    public UserEntity register(RegisterUserDto dto) {
+        Optional<UserEntity> existingUser = userRepository.findFirstByPhoneNumber(dto.getPhoneNumber());
         if (existingUser.isPresent()) {
-            throw new RuntimeException("User with this phone number already exists");
+            throw new ControllerException(ErrorCodeCommon.PHONE_NUMBER_EXISTED);
         }
-
         UserEntity user = new UserEntity();
         user.setUserCode(UUID.randomUUID().toString().toLowerCase());
-        user.setUsername(requestDto.getUsername());
-        user.setPassword(passwordEncoder.encode(requestDto.getPassword())); // Encrypt password
-        user.setFullName(requestDto.getFullName());
-        user.setAddress(requestDto.getAddress());
-        user.setPhoneNumber(requestDto.getPhoneNumber());
-        user.setEmail(requestDto.getEmail());
+        user.setUsername(dto.getUsername());
+        user.setPassword(passwordEncoder.encode(dto.getPassword())); // Encrypt password
+        user.setFullName(dto.getFullName());
+        user.setAddress(dto.getAddress());
+        user.setPhoneNumber(dto.getPhoneNumber());
+        user.setEmail(dto.getEmail());
         return userRepository.save(user);
     }
 

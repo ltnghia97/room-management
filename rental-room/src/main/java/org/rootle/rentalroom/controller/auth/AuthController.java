@@ -6,7 +6,7 @@ import org.rootle.rentalroom.constant.Constant;
 import org.rootle.rentalroom.dto.request.auth.ChangePasswordRequestDto;
 import org.rootle.rentalroom.dto.request.auth.LoginRequestDto;
 import org.rootle.rentalroom.dto.request.auth.RefreshTokenRequestDto;
-import org.rootle.rentalroom.dto.request.auth.RegisterRequestDto;
+import org.rootle.rentalroom.dto.request.auth.RegisterUserDto;
 import org.rootle.rentalroom.dto.response.auth.LoginResponseDto;
 import org.rootle.rentalroom.entity.UserEntity;
 import org.rootle.rentalroom.service.AuthService;
@@ -24,16 +24,6 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
-
-    @PostMapping("/register")
-    public ResponseData<UserEntity> register(@RequestBody RegisterRequestDto registerRequest) {
-        try {
-            UserEntity user = authService.register(registerRequest);
-            return ResponseData.execute(user, "User registered successfully", Constant.RESULT_OK);
-        } catch (Exception e) {
-            return ResponseData.execute(null, Constant.MESSAGE_ERROR, Constant.RESULT_ERROR);
-        }
-    }
 
     @PostMapping("/login")
     public ResponseData<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequest) {

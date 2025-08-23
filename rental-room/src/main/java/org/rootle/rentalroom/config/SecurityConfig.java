@@ -24,8 +24,8 @@ public class SecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/v1/api/auth/**").permitAll()
-                        .requestMatchers("/v1/api/users/add-new").permitAll()
+                        .requestMatchers("/v1/api/auth/*").permitAll()
+                        .requestMatchers("/v1/api/landlord/register-info").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

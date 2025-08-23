@@ -1,16 +1,19 @@
-package org.rootle.rentalroom.dto.request.auth;
+package org.rootle.rentalroom.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.rootle.rentalroom.dto.request.auth.RegisterUserDto;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequestDto {
+public class LandlordRegistrationDTO {
     @NotBlank(message = "Username cannot be empty")
     private String username;
 
@@ -30,4 +33,9 @@ public class RegisterRequestDto {
     @NotBlank(message = "Email cannot be empty")
     @Email(message = "Wrong email format")
     private String email;
+
+    @NotNull(message = "Landlord type cannot be null")
+    private String landlordType;
+
+    private String businessName;
 }
