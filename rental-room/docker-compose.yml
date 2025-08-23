@@ -1,26 +1,27 @@
-version: '3.8' # Phiên bản Docker Compose
+version: '3.8'
 
 services:
-  # Dịch vụ PostgreSQL Database
-  db:
-    image: postgres:16-alpine # Sử dụng image chính thức của PostgreSQL (phiên bản 16, bản alpine nhẹ)
-    container_name: rentalroom_postgres_db # Tên container Docker để dễ quản lý
-    restart: always # Tự động khởi động lại container nếu nó dừng đột ngột
-
-    environment: # Cấu hình các biến môi trường cho database
-      POSTGRES_DB: rental_room_db # ⬅️ THAY THẾ bằng tên database bạn muốn
-      POSTGRES_USER: admin         # ⬅️ THAY THẾ bằng username bạn muốn
-      POSTGRES_PASSWORD: 0DF5A6FB8628 # ⬅️ THAY THẾ bằng mật khẩu bạn muốn
-      # Bạn có thể thêm các biến môi trường khác của PostgreSQL nếu cần
-      # Ví dụ: PGDATA=/var/lib/postgresql/data/pgdata
-
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: macbook_pro16
+      POSTGRES_DB: rental_room
     ports:
-      - "5432:5432" # Ánh xạ cổng 5432 của máy host (bên trái) tới cổng 5432 của container (bên phải)
-      # Điều này cho phép ứng dụng của bạn kết nối tới DB từ máy host
-
+      - "5432:5432"
     volumes:
-      - db_data:/var/lib/postgresql/data # Lưu trữ dữ liệu database để không bị mất khi container dừng hoặc bị xóa
-      # Dữ liệu sẽ được lưu trong một Docker volume có tên 'db_data'
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:latest
+    command: redis-server --requirepass mRedis123
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
 
 volumes:
-  db_data: # Định nghĩa Docker volume có tên 'db_data'
+  postgres_data:
+  redis_data:

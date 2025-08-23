@@ -1,7 +1,6 @@
 package org.rootle.rentalroom.controller.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.hibernate.sql.exec.ExecutionException;
 import org.rootle.rentalroom.base.ResponseData;
 import org.rootle.rentalroom.constant.Constant;
 import org.rootle.rentalroom.dto.request.auth.ChangePasswordRequestDto;
@@ -50,24 +49,16 @@ public class AuthController {
     public ResponseData<String> changePassword(@RequestBody ChangePasswordRequestDto changePasswordRequest,
                                                HttpServletRequest request) {
         try {
-            // Extract JWT token from Authorization header
             String authHeader = request.getHeader("Authorization");
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 return ResponseData.execute(null, "Authorization token is required", Constant.RESULT_ERROR);
             }
-
             String token = authHeader.substring(7); // Remove "Bearer " prefix
-
-            // Validate token
             if (!jwtUtil.isAccessToken(token)) {
                 return ResponseData.execute(null, "Invalid token type", Constant.RESULT_ERROR);
             }
-
-            // Extract username (phone number) from token
-            String phoneNumber = jwtUtil.extractPhoneNumber(token);
-
-            // Validate token
-            if (!jwtUtil.validateToken(token, phoneNumber)) {
+            String fullName = jwtUtil.extractFullName(token);
+            if (!jwtUtil.validateToken(token, fullName)) {
                 return ResponseData.execute(null, "Invalid or expired token", Constant.RESULT_ERROR);
             }
 

@@ -1,9 +1,11 @@
 package org.rootle.rentalroom.entity;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+
 import java.util.Date;
 
 import static jakarta.persistence.TemporalType.TIMESTAMP;
@@ -21,6 +23,9 @@ public class UserEntity {
 
     @Column(name = "usercode", nullable = false, unique = true)
     private String userCode;
+
+    @Column(name = "role", nullable = false)
+    private String role; // Ví dụ: "LANDLORD" hoặc "TENANT"
 
     @Column(name = "username", nullable = false)
     private String username;

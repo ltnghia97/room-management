@@ -29,10 +29,10 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateAccessToken(String phoneNumber) {
+    public String generateAccessToken(String fullName) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", "access");
-        return createToken(claims, phoneNumber, accessTokenExpiration);
+        return createToken(claims, fullName, accessTokenExpiration);
     }
 
     public String generateRefreshToken(String username) {
@@ -45,7 +45,7 @@ public class JwtUtil {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + expiration)).signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
     }
 
-    public String extractPhoneNumber(String token) {
+    public String extractFullName(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -70,9 +70,9 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public Boolean validateToken(String token, String username) {
-        final String tokenUsername = extractPhoneNumber(token);
-        return (tokenUsername.equals(username) && !isTokenExpired(token));
+    public Boolean validateToken(String token, String fullName) {
+        final String tokenUsername = extractFullName(token);
+        return (tokenUsername.equals(fullName) && !isTokenExpired(token));
     }
 
     public Boolean isAccessToken(String token) {

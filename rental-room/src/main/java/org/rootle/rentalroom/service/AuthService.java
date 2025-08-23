@@ -80,18 +80,17 @@ public class AuthService {
 
 
     public LoginResponseDto login(LoginRequestDto loginRequest) {
-        UserEntity user = userRepository.findFirstByPhoneNumber(loginRequest.getUsername())
+        UserEntity userEntity = userRepository.findFirstByPhoneNumber(loginRequest.getUsername())
                 .orElseThrow(() -> new BadCredentialsException("Invalid phone number"));
 
-//        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-//            throw new BadCredentialsException("Invalid password");
-//        }
+        if (!passwordEncoder.matches(loginRequest.getPassword(), userEntity.getPassword())) {
+            throw new BadCredentialsException("Invalid password");
+        }
 
-        String accessToken = jwtUtil.generateAccessToken(user.getPhoneNumber());
-        String refreshToken = jwtUtil.generateRefreshToken(user.getPhoneNumber());
+        String accessToken = jwtUtil.generateAccessToken(userEntity.getFullName());
+        String refreshToken = jwtUtil.generateRefreshToken(userEntity.getFullName());
 
-        // Save refresh token to database
-        saveRefreshToken(refreshToken, user.getPhoneNumber());
+        saveRefreshToken(refreshToken, userEntity.getUserCode());
 
         return LoginResponseDto.builder()
                 .accessToken(accessToken)
@@ -106,7 +105,7 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid refresh token type");
         }
 
-        String phoneNumber = jwtUtil.extractPhoneNumber(refreshToken);
+        String phoneNumber = jwtUtil.extractFullName(refreshToken);
 
         RefreshTokenEntity storedToken = refreshTokenRepository.findByToken(refreshToken)
                 .orElseThrow(() -> new IllegalArgumentException("Refresh token not found"));
