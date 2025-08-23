@@ -1,10 +1,9 @@
 package org.rootle.rentalroom.controller.landlord;
-import org.rootle.rentalroom.base.ResponseData;
-import org.rootle.rentalroom.constant.Constant;
 import org.rootle.rentalroom.dto.request.LandlordRegistrationDTO;
 import org.rootle.rentalroom.dto.response.ResponseLandlordDto;
 import org.rootle.rentalroom.enum_common.LandlordType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.rootle.rentalroom.entity.LandlordEntity;
 import org.rootle.rentalroom.service.LandlordService;
@@ -18,14 +17,15 @@ public class LandlordController {
 
 
     @PostMapping("/register-info")
-    public ResponseData<ResponseLandlordDto> register(@RequestBody LandlordRegistrationDTO dto) {
+    public ResponseEntity<Object> register(@RequestBody LandlordRegistrationDTO dto) {
         try {
+
             if (!LandlordType.isValid(dto.getLandlordType())) {
-                return ResponseData.execute(null, "Invalid value for landlord type. Please choose from: INDIVIDUAL, BUSINESS.", Constant.RESULT_ERROR);
+                return ResponseEntity.badRequest().body("Invalid value for land lord type. Please choose from: INDIVIDUAL, BUSINESS.");
             }
             LandlordType type = LandlordType.valueOf(dto.getLandlordType().toUpperCase());
             if (type == LandlordType.BUSINESS && (dto.getBusinessName() == null || dto.getBusinessName().isBlank())) {
-                return ResponseData.execute(null, "Business name is required for a BUSINESS landlord type.", Constant.RESULT_ERROR);
+                return ResponseEntity.badRequest().body("Business name is required for a BUSINESS landlord type.");
             }
             LandlordEntity landlordEntity = landlordService.register(dto, type);
             ResponseLandlordDto responseLandlordDto = new ResponseLandlordDto();
@@ -36,9 +36,9 @@ public class LandlordController {
             responseLandlordDto.setCreatedAt(landlordEntity.getUser().getCreatedAt().toString());
             responseLandlordDto.setBusinessName(landlordEntity.getBusinessName());
             responseLandlordDto.setLandlordType(LandlordEntity.getTypeName(landlordEntity.getLandlordType()));
-            return ResponseData.execute(responseLandlordDto, "Registered successfully", Constant.RESULT_OK);
+            return ResponseEntity.ok(responseLandlordDto);
         } catch (Exception e) {
-            throw new RuntimeException("Simulating a server error.");
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
 }
