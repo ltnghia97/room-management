@@ -15,7 +15,6 @@ public class LandlordController {
     @Autowired
     LandlordService landlordService;
 
-
     @PostMapping("/register-info")
     public ResponseEntity<Object> register(@RequestBody LandlordRegistrationDTO dto) {
         try {
